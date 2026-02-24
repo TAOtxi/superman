@@ -1,22 +1,12 @@
 package cn.taotxi.Superman.module.CountQuantity;
 
-import java.util.List;
-
-import cn.taotxi.Superman.gui.ConfigScreen;
 import cn.taotxi.Superman.gui.Factory;
-import cn.taotxi.Superman.module.WorldTrigger.WorldTrigger;
-import cn.taotxi.Superman.module.WorldTrigger.WorldTriggerConfig;
 import cn.taotxi.Superman.util.T;
 
-import dev.isxander.yacl3.api.ButtonOption;
 import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.ListOption;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
-import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
-import dev.isxander.yacl3.api.controller.StringControllerBuilder;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 
 public class CountQuantityGui {

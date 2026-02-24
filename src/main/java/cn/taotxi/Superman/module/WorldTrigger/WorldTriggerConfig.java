@@ -2,7 +2,6 @@ package cn.taotxi.Superman.module.WorldTrigger;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.world.phys.Vec3;
 
 import cn.taotxi.Superman.common.BaseConfig;
 
