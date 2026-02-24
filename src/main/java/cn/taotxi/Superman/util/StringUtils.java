@@ -11,6 +11,8 @@ public class StringUtils {
         return "minecraft:" + name;
     }
     public static List<String> withDefaultNameSpace(List<String> names) {
+        System.out.println(names);
+        System.out.println(names.stream().map(StringUtils::withDefaultNameSpace).collect(Collectors.toList()));
         return names.stream().map(StringUtils::withDefaultNameSpace).collect(Collectors.toList());
     }
 }

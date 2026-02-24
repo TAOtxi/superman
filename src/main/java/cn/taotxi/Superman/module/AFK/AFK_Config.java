@@ -14,10 +14,7 @@ public class AFK_Config extends BaseConfig {
     public boolean runCmdWhenTooManyEntities = getDefaultRunCmdWhenTooManyEntities();
     public int maxEntityCount = getDefaultMaxEntityCount();
     public int checkInterval = getDefaultCheckInterval();
-    public List<String> triggerEntityTypes = List.of(
-        "minecraft:zombified_piglin",
-        "minecraft:wither_skeleton"
-    );
+    public List<String> triggerEntityTypes = getDefaultTriggerEntityTypes();
     public int runInterval = getDefaultRunInterval();
     public List<String> triggerCmds = List.of();
 
@@ -38,6 +35,12 @@ public class AFK_Config extends BaseConfig {
     }
     public static int getDefaultRunInterval() {
         return 20 * 1;
+    }
+    public static List<String> getDefaultTriggerEntityTypes() {
+        return List.of(
+            "minecraft:zombified_piglin",
+            "minecraft:wither_skeleton"
+        );
     }
     public static String getDefaultConfigVersion() {
         return "1.0";

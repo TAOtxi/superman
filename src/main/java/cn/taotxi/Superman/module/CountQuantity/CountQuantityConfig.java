@@ -22,7 +22,7 @@ public class CountQuantityConfig extends BaseConfig {
     }
 
     public static int getDefaultUpdateEntitySummaryInterval() {
-        return 10;
+        return 20 * 2;
     }
 
     public static boolean getDefaultAlwaysShowSummary() {

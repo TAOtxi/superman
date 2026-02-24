@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import dev.isxander.yacl3.gui.YACLScreen;
 
 import cn.taotxi.Superman.gui.ConfigScreen;
+import cn.taotxi.Superman.module.AFK.AFK;
 import cn.taotxi.Superman.module.CountQuantity.CountQuantity;
 import cn.taotxi.Superman.module.WorldTrigger.WorldTrigger;
 import cn.taotxi.Superman.util.EventBus;
@@ -45,12 +46,15 @@ public class Superman implements ModInitializer {
             tickCounter++;
             CountQuantity.registerTickEvents(client, tickCounter);
             WorldTrigger.registerTickEvents(client, tickCounter);
+            AFK.registerTickEvents(client, tickCounter);
         });
     }
 
     private static void registerCommand() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             CountQuantity.registerCommand(dispatcher, registryAccess);
+            WorldTrigger.registerCommand(dispatcher, registryAccess);
+            AFK.registerCommand(dispatcher, registryAccess);
         });
     }
 

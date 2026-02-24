@@ -67,33 +67,42 @@ public class CountQuantity {
         LiteralArgumentBuilder<FabricClientCommandSource> cq = ClientCommandManager.literal("cq")
             .executes(CountQuantity::showHelp)
             .then(ClientCommandManager.literal("help").executes(CountQuantity::showHelp))
-            .then(ClientCommandManager.literal("reload")
-                .executes(context -> {
-                    context.getSource().sendFeedback(T.tl("message.reload", MODULE_NAME));
-                    config = CountQuantityConfig.load(CountQuantityConfig.class, MODULE_NAME);
-                    return 1;
-                }))
-            .then(ClientCommandManager.literal("toggle")
-                .executes(context -> {
-                    config.enabled = !config.enabled;
-                    config.save();
-                    context.getSource().sendFeedback(T.tl("message.toggle", MODULE_NAME, config.enabled));
-                    return 1;
-                }))
-            .then(ClientCommandManager.literal("config")
-                .executes(context -> {
-                    EventBus.post("openConfigGui", Map.of("title", T.t("CountQuantity.name")));
-                    return 1;
-                }))
+            .then(ClientCommandManager.literal("toggle").executes(CountQuantity::toggleModule))
+            .then(ClientCommandManager.literal("reload").executes(CountQuantity::reloadConfig))
+            .then(ClientCommandManager.literal("config").executes(CountQuantity::openConfigGui))
+            .then(ClientCommandManager.literal("summary").executes(CountQuantity::toggleAlwaysShowSummary))
             .then(ClientCommandManager.literal("count")
                 .then(ClientCommandManager.argument("topN", IntegerArgumentType.integer())
-                .executes(CountQuantity::displayCountInfo))
-                );
+                .executes(CountQuantity::displayCountInfo)));
 
             dispatcher.register(cq);
     }
 
     private static int showHelp(CommandContext<FabricClientCommandSource> context) {
+        return 1;
+    }
+
+    private static int openConfigGui(CommandContext<FabricClientCommandSource> context) {
+        EventBus.post("openConfigGui", Map.of("title", T.t("countquantity.name")));
+        return 1;
+    }
+
+    private static int reloadConfig(CommandContext<FabricClientCommandSource> context) {
+        context.getSource().sendFeedback(T.tl("message.reload", MODULE_NAME));
+        config = CountQuantityConfig.load(CountQuantityConfig.class, MODULE_NAME);
+        return 1;
+    }
+
+    private static int toggleModule(CommandContext<FabricClientCommandSource> context) {
+        config.enabled = !config.enabled;
+        config.save();
+        context.getSource().sendFeedback(T.tl("message.toggle", MODULE_NAME, config.enabled));
+        return 1;
+    }
+    private static int toggleAlwaysShowSummary(CommandContext<FabricClientCommandSource> context) {
+        config.alwaysShowSummary = !config.alwaysShowSummary;
+        context.getSource().sendFeedback(
+            Component.literal(String.valueOf(config.alwaysShowSummary)));
         return 1;
     }
 

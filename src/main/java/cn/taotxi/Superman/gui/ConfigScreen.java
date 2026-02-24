@@ -7,8 +7,11 @@ import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.gui.YACLScreen;
 import cn.taotxi.Superman.Superman;
+import cn.taotxi.Superman.module.AFK.AFK;
 import cn.taotxi.Superman.module.AFK.AFK_Gui;
+import cn.taotxi.Superman.module.CountQuantity.CountQuantity;
 import cn.taotxi.Superman.module.CountQuantity.CountQuantityGui;
+import cn.taotxi.Superman.module.WorldTrigger.WorldTrigger;
 import cn.taotxi.Superman.module.WorldTrigger.WorldTriggerGui;
 import cn.taotxi.Superman.util.T;
 
@@ -19,6 +22,9 @@ public class ConfigScreen {
             YetAnotherConfigLib.createBuilder()
                 .title(T.tl("gui.config.title"))
                 .save(() -> {
+                    CountQuantity.config.save();
+                    WorldTrigger.config.save();
+                    AFK.config.save();
                     Superman.LOGGER.info("Config saved...");
                 });
 

@@ -3,8 +3,6 @@ package cn.taotxi.Superman.module.AFK;
 import java.util.List;
 
 import cn.taotxi.Superman.gui.Factory;
-import cn.taotxi.Superman.module.CountQuantity.CountQuantity;
-import cn.taotxi.Superman.module.CountQuantity.CountQuantityConfig;
 import cn.taotxi.Superman.util.StringUtils;
 import cn.taotxi.Superman.util.T;
 import dev.isxander.yacl3.api.ConfigCategory;
@@ -76,18 +74,6 @@ public class AFK_Gui {
             .controller(IntegerFieldControllerBuilder::create)
             .build());
 
-        detectEntityCountGroup.option(ListOption.<String>createBuilder()
-            .name(T.tl("afk.triggerEntityTypes"))
-            .description(OptionDescription.of(T.tl("afk.triggerEntityTypes.desc")))
-            .binding(
-                List.of(""),
-                () -> AFK.config.triggerEntityTypes,
-                val -> AFK.config.triggerEntityTypes = StringUtils.withDefaultNameSpace(val)
-            )
-            .initial("")
-            .controller(StringControllerBuilder::create)
-            .build());
-
         detectEntityCountGroup.option(Option.<Integer>createBuilder()
             .name(T.tl("afk.runInterval"))
             .description(OptionDescription.of(T.tl("afk.runInterval.desc")))
@@ -97,18 +83,32 @@ public class AFK_Gui {
             .controller(IntegerFieldControllerBuilder::create)
             .build());
 
-        detectEntityCountGroup.option(ListOption.<String>createBuilder()
+        category.group(detectEntityCountGroup.build());
+
+        category.group(ListOption.<String>createBuilder()
+            .name(T.tl("afk.triggerEntityTypes"))
+            .description(OptionDescription.of(T.tl("afk.triggerEntityTypes.desc")))
+            .binding(
+                AFK_Config.getDefaultTriggerEntityTypes(),
+                () -> AFK.config.triggerEntityTypes,
+                val -> AFK.config.triggerEntityTypes = StringUtils.withDefaultNameSpace(val) // TODO: getter和setter不匹配，yacl会警告。
+            )
+            .initial("")
+            .controller(StringControllerBuilder::create)
+            .build());
+
+        category.group(ListOption.<String>createBuilder()
             .name(T.tl("afk.triggerCmds"))
             .description(OptionDescription.of(T.tl("afk.triggerCmds.desc")))
             .binding(
-                List.of(""),
+                List.of(),
                 () -> AFK.config.triggerCmds,
                 val -> AFK.config.triggerCmds = val
             )
             .initial("")
             .controller(StringControllerBuilder::create)
             .build());
-
+        
         return category;
     }
 }
