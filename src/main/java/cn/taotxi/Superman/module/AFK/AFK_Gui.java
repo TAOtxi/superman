@@ -3,7 +3,6 @@ package cn.taotxi.Superman.module.AFK;
 import java.util.List;
 
 import cn.taotxi.Superman.gui.Factory;
-import cn.taotxi.Superman.util.StringUtils;
 import cn.taotxi.Superman.util.T;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.ListOption;
@@ -91,7 +90,8 @@ public class AFK_Gui {
             .binding(
                 AFK_Config.getDefaultTriggerEntityTypes(),
                 () -> AFK.config.triggerEntityTypes,
-                val -> AFK.config.triggerEntityTypes = StringUtils.withDefaultNameSpace(val) // TODO: getter和setter不匹配，yacl会警告。
+                // val -> AFK.config.triggerEntityTypes = StringUtils.withDefaultNameSpace(val) // TODO: getter和setter不匹配，yacl会警告。
+                val -> AFK.config.triggerEntityTypes = val
             )
             .initial("")
             .controller(StringControllerBuilder::create)

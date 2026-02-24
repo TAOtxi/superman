@@ -28,7 +28,7 @@ public class AFK {
     private static int nextRunTick = 0;
 
     public static void registerTickEvents(Minecraft client, int tickCounter) {
-        if (isOutOfMaxEntityCount || tickCounter % config.checkInterval != 0) {
+        if (!isOutOfMaxEntityCount && tickCounter % config.checkInterval != 0) {
             return;
         }
         if (!isOutOfMaxEntityCount) {
@@ -37,6 +37,7 @@ public class AFK {
         }
         if (isOutOfMaxEntityCount && tickCounter == nextRunTick) {
             String cmd = config.triggerCmds.get(runCmdIndex);
+            LOGGER.info("Run command: " + cmd);
             nextRunTick = tickCounter + config.runInterval;
             Message.sendMessage(cmd);
 
@@ -50,7 +51,7 @@ public class AFK {
     private static boolean isOutOfMaxCounts(Minecraft client) {
         AABB box = client.player.getBoundingBox().inflate(128);
         List<Entity> entities = client.level.getEntities(client.player, box, (entity) -> {
-            String type = entity.getType().getDescriptionId();
+            String type = entity.getType().toShortString();
             if (config.triggerEntityTypes.contains(type)) {
                 return true;
             }

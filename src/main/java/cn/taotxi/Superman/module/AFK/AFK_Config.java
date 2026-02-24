@@ -38,8 +38,8 @@ public class AFK_Config extends BaseConfig {
     }
     public static List<String> getDefaultTriggerEntityTypes() {
         return List.of(
-            "minecraft:zombified_piglin",
-            "minecraft:wither_skeleton"
+            "zombified_piglin",
+            "wither_skeleton"
         );
     }
     public static String getDefaultConfigVersion() {
