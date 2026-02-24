@@ -5,6 +5,7 @@ import cn.taotxi.Superman.common.BaseConfig;
 public class CountQuantityConfig extends BaseConfig {
     public CountQuantityConfig(String moduleName) {
         super(moduleName);
+        CONFIG_VERSION = getDefaultConfigVersion();
     }
 
     public boolean enabled = getDefaultEnabled();
@@ -26,5 +27,9 @@ public class CountQuantityConfig extends BaseConfig {
 
     public static boolean getDefaultAlwaysShowSummary() {
         return false;
+    }
+
+    public static String getDefaultConfigVersion() {
+        return "1.0";
     }
 }

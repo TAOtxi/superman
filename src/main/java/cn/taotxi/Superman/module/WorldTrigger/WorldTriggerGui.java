@@ -136,9 +136,8 @@ public class WorldTriggerGui {
                     .controller(IntegerFieldControllerBuilder::create)
                     .build()
             );
-
-            category.group(group.build());
-            category.group(ListOption.<String>createBuilder()
+            
+            group.option(ListOption.<String>createBuilder()
                     .name(T.tl("worldtrigger.block.command.name"))
                     .description(OptionDescription.of(T.tl("worldtrigger.block.command.name.desc")))
                     .binding(
@@ -150,6 +149,8 @@ public class WorldTriggerGui {
                     .controller(StringControllerBuilder::create)
                     .build()
             );
+
+            category.group(group.build());
         }
         return category;
     }

@@ -13,6 +13,7 @@ import cn.taotxi.Superman.gui.ConfigScreen;
 import cn.taotxi.Superman.module.CountQuantity.CountQuantity;
 import cn.taotxi.Superman.module.WorldTrigger.WorldTrigger;
 import cn.taotxi.Superman.util.EventBus;
+import cn.taotxi.Superman.test.TestCommand;
 
 public class Superman implements ModInitializer {
 	public static final String MOD_ID = "superman";
@@ -33,6 +34,7 @@ public class Superman implements ModInitializer {
 		registerSomeEvents();
         registerCommand();
         registerTickEvents();
+        TestCommand.register();
 	}
 
     private static void registerTickEvents() {

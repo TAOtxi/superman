@@ -36,6 +36,16 @@ public class CountQuantity {
     public static final MLogger LOGGER = new MLogger(MODULE_NAME);
     public static CountQuantityConfig config = CountQuantityConfig.load(CountQuantityConfig.class, MODULE_NAME);
     private static String summary = "";
+    private static final List<CategoryStyle> categories = List.of(
+            new CategoryStyle(MobCategory.MONSTER, "§4"),
+            new CategoryStyle(MobCategory.CREATURE, "§2"),
+            new CategoryStyle(MobCategory.AMBIENT, "§8"),
+            new CategoryStyle(MobCategory.AXOLOTLS, "§f"),
+            new CategoryStyle(MobCategory.UNDERGROUND_WATER_CREATURE, "§f"),
+            new CategoryStyle(MobCategory.WATER_CREATURE, "§1"),
+            new CategoryStyle(MobCategory.WATER_AMBIENT, "§3"),
+            new CategoryStyle(MobCategory.MISC, "§f")
+        );
 
     public static void init() {
     }
@@ -109,6 +119,7 @@ public class CountQuantity {
         return 1;
     }
 
+    // TODO: 忽略一些实体，比如戴南瓜头的敌对生物
     private static String getEntitySummary(Minecraft client) {
         ClientLevel world = client.level;
         LocalPlayer player = client.player;
@@ -118,16 +129,6 @@ public class CountQuantity {
         Map<String, Integer> categoryCount = summary.entrySet().stream()
             .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().values().stream().mapToInt(List::size).sum()));
 
-        List<CategoryStyle> categories = List.of(
-            new CategoryStyle(MobCategory.MONSTER, "§4"),
-            new CategoryStyle(MobCategory.CREATURE, "§2"),
-            new CategoryStyle(MobCategory.AMBIENT, "§8"),
-            new CategoryStyle(MobCategory.AXOLOTLS, "§f"),
-            new CategoryStyle(MobCategory.UNDERGROUND_WATER_CREATURE, "§f"),
-            new CategoryStyle(MobCategory.WATER_CREATURE, "§1"),
-            new CategoryStyle(MobCategory.WATER_AMBIENT, "§3"),
-            new CategoryStyle(MobCategory.MISC, "§f")
-        );
         StringBuilder sb = new StringBuilder();
         for (CategoryStyle category : categories) {
             String categoryName = category.categoryName;

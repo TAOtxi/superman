@@ -14,12 +14,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
+import cn.taotxi.Superman.module.CountQuantity.CountQuantity;
 
-public class Command {
+public class TestCommand {
     public static void register() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-            LiteralArgumentBuilder<FabricClientCommandSource> cq = ClientCommandManager.literal("cq").executes(context -> {
-                context.getSource().sendFeedback(T.l("Called Show Command"));
+            LiteralArgumentBuilder<FabricClientCommandSource> cq = ClientCommandManager.literal("t").executes(context -> {
+                context.getSource().sendFeedback(T.l("Called test Command"));
                 return 1;
             }).then(ClientCommandManager.literal("entity").executes(context -> {
                 context.getSource().sendFeedback(T.l("Show entity information"));

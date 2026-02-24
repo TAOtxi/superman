@@ -9,8 +9,9 @@ import cn.taotxi.Superman.common.BaseConfig;
 public class WorldTriggerConfig extends BaseConfig {
     public WorldTriggerConfig(String moduleName) {
         super(moduleName);
+        CONFIG_VERSION = getDefaultConfigVersion();
     }
-
+    
     public boolean enabled = getDefaultEnabled();
     public List<TriggerItem> triggerList = new ArrayList<>();
 
@@ -52,6 +53,9 @@ public class WorldTriggerConfig extends BaseConfig {
         }
         public static int getDefaultRunInterval() {
             return 20 * 5;
+        }
+        public static String getDefaultConfigVersion() {
+            return "1.0";
         }
     }
 }

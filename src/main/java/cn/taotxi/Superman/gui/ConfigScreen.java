@@ -7,6 +7,7 @@ import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.gui.YACLScreen;
 import cn.taotxi.Superman.Superman;
+import cn.taotxi.Superman.module.AFK.AFK_Gui;
 import cn.taotxi.Superman.module.CountQuantity.CountQuantityGui;
 import cn.taotxi.Superman.module.WorldTrigger.WorldTriggerGui;
 import cn.taotxi.Superman.util.T;
@@ -25,9 +26,13 @@ public class ConfigScreen {
         ConfigCategory.Builder entityCategory = CountQuantityGui.createCountQuantityCategoryBuilder(parent);
         builder.category(entityCategory.build());
 
-        // 世界触发相关模块
+        // 世界定点触发相关模块
         ConfigCategory.Builder worldTriggerCategory = WorldTriggerGui.createWorldTriggerCategoryBuilder(parent);
         builder.category(worldTriggerCategory.build());
+
+        // AFK 相关模块
+        ConfigCategory.Builder afkCategory = AFK_Gui.createAFKCategoryBuilder(parent);
+        builder.category(afkCategory.build());
 
         YetAnotherConfigLib yacl = builder.build();
         return yacl.generateScreen(parent);
