@@ -23,7 +23,13 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.monster.ElderGuardian;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.item.ItemStack;
 
 public class CountQuantity {
     public static final String MODULE_NAME = "countquantity";
@@ -40,9 +46,6 @@ public class CountQuantity {
             new CategoryStyle(MobCategory.WATER_AMBIENT, "§3"),
             new CategoryStyle(MobCategory.MISC, "§f")
         );
-
-    public static void init() {
-    }
 
     public static void registerTickEvents(Minecraft client, int tickCounter) {
         if (!config.enabled) {
@@ -122,27 +125,29 @@ public class CountQuantity {
         return 1;
     }
 
-    // TODO: 忽略一些实体，比如戴南瓜头的敌对生物
     private static String getEntitySummary(Minecraft client) {
         ClientLevel world = client.level;
         LocalPlayer player = client.player;
-        List<Entity> entities = world.getEntities(player, player.getBoundingBox().inflate(config.countRange));
+        List<Entity> entities = world.getEntities(
+            player, 
+            player.getBoundingBox().inflate(config.countRange), 
+            CountQuantity::isCounted
+        );
         
-        var summary = getEntitySummary(entities);
+        var summary = getSummary(entities);
         Map<String, Integer> categoryCount = summary.entrySet().stream()
             .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().values().stream().mapToInt(List::size).sum()));
-
         StringBuilder sb = new StringBuilder();
         for (CategoryStyle category : categories) {
             String categoryName = category.categoryName;
             int currentCounts = categoryCount.getOrDefault(categoryName, 0);
             sb.append(category.toString(currentCounts) + "§7,");
         }
-        sb.setLength(sb.length() - 1);
+        sb.setLength(sb.length() - 3);
         return sb.toString();
     }
 
-    public static Map<String, Map<String, List<Entity>>> getEntitySummary(List<Entity> entities) {
+    public static Map<String, Map<String, List<Entity>>> getSummary(List<Entity> entities) {
         Map<String, Map<String, List<Entity>>> summary = new HashMap<>();
         for (Entity entity : entities) {
             var type = entity.getType();
@@ -157,6 +162,62 @@ public class CountQuantity {
             summary.get(category.getName()).get(entityId).add(entity);
         }
         return summary;
+    }
+
+    private static boolean isCounted(Entity entity) {
+        // 客户端无法获取 persistenceRequired 真实数据，已弃用。
+        // if (entity instanceof Mob mob && !mob.isPersistenceRequired()) {
+        //     return true;
+        // }
+
+        // 末影龙部件
+        if (entity instanceof EnderDragonPart) {
+            return false;
+        }
+
+        // 不是生物，直接返回
+        if (!(entity instanceof Mob mob)) {
+            return true;
+        }
+        
+        // 下列检测是无奈之举，因为指令生成的带名字或南瓜头等等的生物，
+        // 若无特别指定，否则其 persistenceRequired 仍为 false，会被计入生物上限之中。
+        ItemStack headEquipment = mob.getItemBySlot(EquipmentSlot.HEAD);
+        // 检测是否戴南瓜头
+        if (!headEquipment.isEmpty() && 
+            headEquipment.getItemHolder().getRegisteredName().equals("minecraft:carved_pumpkin")) {
+            return false;
+        }
+        // 被重命名过
+        if (mob.hasCustomName()) {
+            return false;
+        }
+        // 特定生物
+        // String type = mob.getType().toShortString();
+        // List<String> ignoreEntityTypes = List.of("warden", "shulker", "ender_dragon", "wither");
+        // if (ignoreEntityTypes.contains(type)) {
+        //     return false;
+        // }
+        
+        // 远古守卫者
+        if (mob instanceof ElderGuardian) {
+            return false;
+        }
+
+        // 手持方块的末影人
+        if (mob instanceof EnderMan enderMan && enderMan.getCarriedBlock() != null) {
+            return false;
+        }
+
+        // 骑乘其他生物的实体
+        if (mob.isPassenger()) {
+            return false;
+        }
+
+        // TODO: 待完善剩余的其他情况，比如捡起过物品，繁殖过，结构生物等等。。。客户端完成希望不大
+        // return false;
+
+        return true;
     }
 }
 
