@@ -44,6 +44,7 @@ public class Superman implements ModInitializer {
                 return;
             }
             tickCounter++;
+            EventBus.checkQueue();
             CountQuantity.registerTickEvents(client, tickCounter);
             WorldTrigger.registerTickEvents(client, tickCounter);
             AFK.registerTickEvents(client, tickCounter);
@@ -52,9 +53,9 @@ public class Superman implements ModInitializer {
 
     private static void registerCommand() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+            AFK.registerCommand(dispatcher, registryAccess);
             CountQuantity.registerCommand(dispatcher, registryAccess);
             WorldTrigger.registerCommand(dispatcher, registryAccess);
-            AFK.registerCommand(dispatcher, registryAccess);
         });
     }
 
