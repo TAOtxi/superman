@@ -41,6 +41,23 @@ public class AFK_Gui {
             .controller(IntegerFieldControllerBuilder::create)
             .build());
 
+        autoAttackGroup.option(Factory.addToggleOption(
+            T.tl("afk.safeAttack.enabled"),
+            T.tl("afk.safeAttack.desc"),
+            AFK_Config.getDefaultSafeAttack(),
+            () -> AFK.config.safeAttack,
+            val -> AFK.config.safeAttack = val
+        ));
+
+        autoAttackGroup.option(Option.<Integer>createBuilder()
+            .name(T.tl("afk.safeDurability"))
+            .description(OptionDescription.of(T.tl("afk.safeDurability.desc")))
+            .binding(AFK_Config.getDefaultSafeDurability(),
+                () -> AFK.config.safeDurability,
+                val -> AFK.config.safeDurability = val)
+            .controller(IntegerFieldControllerBuilder::create)
+            .build());
+
         category.group(autoAttackGroup.build());
 
         OptionGroup.Builder detectEntityCountGroup = OptionGroup.createBuilder()

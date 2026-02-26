@@ -5,6 +5,7 @@ public class TickUtils {
     private static long lastNanoTime = 0L;
     private static double measuredMSPT = -1.0D;
     private static double measuredTPS = -1.0D;
+    private static double averageTPS = 0D;
 
     public static void updateNanoTick(long timeUpdate) {
         final long currentTime = System.nanoTime();
@@ -14,9 +15,14 @@ public class TickUtils {
         measuredTPS = measuredMSPT <= 50 ? 20 : (1000D / measuredMSPT);
         lastNanoTick = timeUpdate;
         lastNanoTime = currentTime;
+        averageTPS = (averageTPS * 0.9D) + (measuredTPS * 0.1D);
     }
 
-    public static double getTPS() {
+    public static double getMeasuredTps() {
         return measuredTPS;
+    }
+    
+    public static double getAverageTps() {
+        return averageTPS;
     }
 }

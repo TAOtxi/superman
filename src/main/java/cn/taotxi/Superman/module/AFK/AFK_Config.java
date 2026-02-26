@@ -11,6 +11,8 @@ public class AFK_Config extends BaseConfig {
     }
     public boolean autoAttack = getDefaultAutoAttack();
     public int attackInterval = getDefaultAttackInterval();
+    public boolean safeAttack = getDefaultSafeAttack();
+    public int safeDurability = getDefaultSafeDurability();
     public boolean runCmdWhenTooManyEntities = getDefaultRunCmdWhenTooManyEntities();
     public int maxEntityCount = getDefaultMaxEntityCount();
     public int checkInterval = getDefaultCheckInterval();
@@ -23,6 +25,12 @@ public class AFK_Config extends BaseConfig {
     }
     public static int getDefaultAttackInterval() {
         return 10 * 1;
+    }
+    public static boolean getDefaultSafeAttack() {
+        return true;
+    }
+    public static int getDefaultSafeDurability() {
+        return 10;
     }
     public static boolean getDefaultRunCmdWhenTooManyEntities() {
         return true;
