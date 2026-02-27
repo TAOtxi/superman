@@ -26,27 +26,38 @@ public class WorldTrigger {
 
     // TODO: 每次进入服务器都清空任务列表
     public static void registerTickEvents(Minecraft client, int tickCounter) {
-        if (!config.enabled || client.isSingleplayer()) return;     // 单人模式下不触发
+        if (!config.enabled || config.triggerList.size() == 0) return;
 
-        String serverIp = client.getCurrentServer().ip;
+        // 若任务队列不为空，跳过轮询频率限制
+        if (tasks.size() == 0 && tickCounter % config.checkInterval != 0) return;
+
+        String serverIp = client.isSingleplayer() ? "*" : client.getCurrentServer().ip; // 单人模式此属性不起作用
         String worldName = client.level.dimension().location().toString();
         Vec3 playerPos = client.player.position();
 
-        for (WorldTriggerConfig.TriggerItem item : config.triggerList) {
-            if (tasks.stream().anyMatch(task -> task.item == item)) continue;
+        // 只有在轮询频率到达时才检查触发条件
+        if (tickCounter % config.checkInterval == 0) {
+            for (WorldTriggerConfig.TriggerItem item : config.triggerList) {
+                if (tasks.stream().anyMatch(task -> task.item == item)) continue;
 
-            if (!item.serverIp.equals(serverIp) && !item.serverIp.equals("*")) return;
-            if (!item.worldName.equals(worldName) && !item.worldName.equals("*")) return;
+                if (!item.serverIp.equals(serverIp) && !item.serverIp.equals("*")) return;
+                if (!item.worldName.equals(worldName) && !item.worldName.equals("*")) return;
 
-            if (item.triggerRadius >= playerPos.distanceToSqr(new Vec3(item.triggerPosX, item.triggerPosY, item.triggerPosZ))) {
-                tasks.add(new Task(item, item.runDelay + tickCounter));
+                double distance = playerPos.distanceTo(new Vec3(item.triggerPosX, item.triggerPosY, item.triggerPosZ));
+                if ((item.type && distance <= item.triggerRadius) || 
+                    (!item.type && distance >= item.triggerRadius)) {
+                    LOGGER.info("Add task: Command{}, runInterval[{}]", item.commandList, item.runInterval);
+                    tasks.add(new Task(item, item.runDelay + tickCounter));
+                }
             }
         }
 
         for (int i=tasks.size()-1; i>=0; i--) {
             Task task = tasks.get(i);
-            if (task.runTick == tickCounter) {
-                Message.sendMessage(task.item.commandList.get(task.runCommandIndex));
+            if (tickCounter >= task.runTick) {
+                String command = task.item.commandList.get(task.runCommandIndex);
+                LOGGER.info("Running task: Tick[{}], Command[{}]", tickCounter, command);
+                Message.sendMessage(command);
                 task.runCommandIndex++;
                 task.runTick += task.item.runInterval;
                 

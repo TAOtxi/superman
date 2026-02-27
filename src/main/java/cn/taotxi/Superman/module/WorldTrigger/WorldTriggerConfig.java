@@ -12,10 +12,15 @@ public class WorldTriggerConfig extends BaseConfig {
     }
     
     public boolean enabled = getDefaultEnabled();
+    public int checkInterval = getDefaultCheckInterval();
     public List<TriggerItem> triggerList = new ArrayList<>();
 
     public static boolean getDefaultEnabled() {
         return true;
+    }
+
+    public static int getDefaultCheckInterval() {
+        return 20 * 5;
     }
 
     public void addItems() {
@@ -31,6 +36,7 @@ public class WorldTriggerConfig extends BaseConfig {
         public int triggerPosY = 0;
         public int triggerPosZ = 0;
         public int triggerRadius = getDefaultTriggerRadius();
+        public boolean type = getDefaultType();
         public int runDelay = getDefaultRunDelay();
         public int runInterval = getDefaultRunInterval();
         public List<String> commandList = List.of("");
@@ -42,10 +48,13 @@ public class WorldTriggerConfig extends BaseConfig {
             return "*";
         }
         public static String getDefaultWorldName() {
-            return "overworld";
+            return "minecraft:overworld";
         }
         public static int getDefaultTriggerRadius() {
             return 10;
+        }
+        public static boolean getDefaultType() {
+            return true;
         }
         public static int getDefaultRunDelay() {
             return 20 * 10;

@@ -32,6 +32,18 @@ public class WorldTriggerGui {
             val -> WorldTrigger.config.enabled = val
         ));
 
+        category.option(Option.<Integer>createBuilder()
+                    .name(T.tl("worldtrigger.checkInterval"))
+                    .description(OptionDescription.of(T.tl("worldtrigger.checkInterval.desc")))
+                    .binding(
+                        WorldTriggerConfig.getDefaultCheckInterval(),
+                        () -> WorldTrigger.config.checkInterval,
+                        val -> WorldTrigger.config.checkInterval = Math.clamp(val, 1, Integer.MAX_VALUE)
+                    )
+                    .controller(IntegerFieldControllerBuilder::create)
+                    .build()
+            );
+
         category.option(ButtonOption.createBuilder()
                 .name(T.tl("worldtrigger.addBlock").withStyle(ChatFormatting.GREEN))
                 .description(OptionDescription.of(T.tl("worldtrigger.addBlock.desc")))
@@ -111,6 +123,14 @@ public class WorldTriggerGui {
                     .controller(IntegerFieldControllerBuilder::create)
                     .build()
             );
+
+            group.option(Factory.addToggleOption(
+                T.tl("worldtrigger.block.type"),
+                T.tl("worldtrigger.block.type.desc"),
+                item.type,
+                () -> item.type,
+                val -> item.type = val
+            ));
 
             group.option(Option.<Integer>createBuilder()
                     .name(T.tl("worldtrigger.block.runDelay"))
