@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
 import cn.taotxi.Superman.util.EventBus;
+import cn.taotxi.Superman.util.ItemStackUtil;
 import cn.taotxi.Superman.util.MLogger;
 import cn.taotxi.Superman.util.Message;
 import cn.taotxi.Superman.util.T;
@@ -70,9 +72,9 @@ public class AFK {
     }
 
     private static void autoAttack(Minecraft client, int tickCounter) {
-        // TODO: 逻辑待优化
         if (!config.autoAttack) return;
-
+        
+        // TODO: 使用tick指令降低tps时，Tick Event事件的回调频率也会跟随降低
         double adaptInterval = config.attackInterval * 20 / TickUtils.getAverageTps();
         if (tickCounter - lastAttackTick < adaptInterval) return;
         lastAttackTick = tickCounter;
@@ -117,8 +119,19 @@ public class AFK {
         LiteralArgumentBuilder<FabricClientCommandSource> afk = ClientCommandManager.literal("afk")
             .executes(AFK::showHelp)
             .then(ClientCommandManager.literal("help").executes(AFK::showHelp))
-            .then(ClientCommandManager.literal("attack").executes(AFK::toggleAttack))
-            .then(ClientCommandManager.literal("safeAFK").executes(AFK::toggleSafeAFK))
+            .then(ClientCommandManager.literal("attack")
+                .then(ClientCommandManager.literal("true").executes(context -> setAutoAttack(context, true)))
+                .then(ClientCommandManager.literal("false").executes(context -> setAutoAttack(context, false)))
+                .then(ClientCommandManager.literal("info").executes(AFK::showAttackInfo))
+                .then(ClientCommandManager.argument("interval", IntegerArgumentType.integer(1))
+                    .executes(AFK::setAttackInterval)))
+
+            .then(ClientCommandManager.literal("safeAfk")
+                .then(ClientCommandManager.literal("true").executes(context -> setSafeAFK(context, true)))
+                .then(ClientCommandManager.literal("false").executes(context -> setSafeAFK(context, false)))
+                .then(ClientCommandManager.argument("interval", IntegerArgumentType.integer(1))
+                    .executes(AFK::setSafeCheckInterval)))
+
             .then(ClientCommandManager.literal("reload").executes(AFK::reloadConfig))
             .then(ClientCommandManager.literal("config").executes(AFK::openConfigGui));
 
@@ -141,17 +154,56 @@ public class AFK {
         return 1;
     }
 
-    private static int toggleAttack(CommandContext<FabricClientCommandSource> context) {
-        config.autoAttack = !config.autoAttack;
+    private static int setAutoAttack(CommandContext<FabricClientCommandSource> context, boolean setValue) {
+        if (config.autoAttack != setValue) {
+            config.autoAttack = setValue;
+            config.save();
+        }
         context.getSource().sendFeedback(
             Component.literal(String.valueOf(config.autoAttack)));
         return 1;
     }
 
-    private static int toggleSafeAFK(CommandContext<FabricClientCommandSource> context) {
-        config.runCmdWhenTooManyEntities = !config.runCmdWhenTooManyEntities;
+    private static int showAttackInfo(CommandContext<FabricClientCommandSource> context) {
+        double avgTps = TickUtils.getAverageTps();
+        double adaptInterval = config.attackInterval * 20 / avgTps;
+        String tickInfo = String.format(String.format("Attack interval: %.2f, AvgTPS: %.2f\n", adaptInterval, avgTps));
+
+        ItemStack handItem = context.getSource().getPlayer().getMainHandItem();
+        String weaponInfo = String.format("Weapon: %s, Durability: %d\n", ItemStackUtil.getName(handItem), handItem.getMaxDamage() - handItem.getDamageValue());
+        Entity targetEntity = context.getSource().getClient().crosshairPickEntity;
+        String attackTargetInfo = String.format("Attack target: %s", targetEntity != null ? T.tt(targetEntity.getType().getDescriptionId()) : "None");
+        context.getSource().sendFeedback(
+            T.ls(tickInfo, weaponInfo, attackTargetInfo)
+        );
+        return 1;
+    }
+
+    private static int setSafeAFK(CommandContext<FabricClientCommandSource> context, boolean setValue) {
+        if (config.runCmdWhenTooManyEntities != setValue) {
+            config.runCmdWhenTooManyEntities = setValue;
+            config.save();
+        }
         context.getSource().sendFeedback(
             Component.literal(String.valueOf(config.runCmdWhenTooManyEntities)));
+        return 1;
+    }
+
+    private static int setSafeCheckInterval(CommandContext<FabricClientCommandSource> context) {
+        int interval = IntegerArgumentType.getInteger(context, "interval");
+        config.checkInterval = interval;
+        config.save();
+        context.getSource().sendFeedback(
+            T.tl("message.setInterval", interval));
+        return 1;
+    }
+
+    private static int setAttackInterval(CommandContext<FabricClientCommandSource> context) {
+        int interval = IntegerArgumentType.getInteger(context, "interval");
+        config.attackInterval = interval;
+        config.save();
+        context.getSource().sendFeedback(
+            T.tl("message.setInterval", interval));
         return 1;
     }
 }

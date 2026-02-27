@@ -15,7 +15,9 @@ public class TickUtils {
         measuredTPS = measuredMSPT <= 50 ? 20 : (1000D / measuredMSPT);
         lastNanoTick = timeUpdate;
         lastNanoTime = currentTime;
-        averageTPS = (averageTPS * 0.9D) + (measuredTPS * 0.1D);
+
+        // TODO: 逻辑待优化
+        averageTPS = (averageTPS * 0.8D) + (measuredTPS * 0.2D);
     }
 
     public static double getMeasuredTps() {
