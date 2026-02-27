@@ -27,9 +27,9 @@ public class WorldTriggerConfig extends BaseConfig {
         public boolean enabled = getDefaultEnabled();
         public String serverIp = getDefaultServerIp();
         public String worldName = getDefaultWorldName();
-        public double triggerPosX = 0;
-        public double triggerPosY = 0;
-        public double triggerPosZ = 0;
+        public int triggerPosX = 0;
+        public int triggerPosY = 0;
+        public int triggerPosZ = 0;
         public int triggerRadius = getDefaultTriggerRadius();
         public int runDelay = getDefaultRunDelay();
         public int runInterval = getDefaultRunInterval();

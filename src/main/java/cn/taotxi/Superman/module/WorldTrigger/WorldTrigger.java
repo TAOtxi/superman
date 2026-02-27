@@ -43,13 +43,13 @@ public class WorldTrigger {
             }
         }
 
-        for (Task task : tasks) {
+        for (int i=tasks.size()-1; i>=0; i--) {
+            Task task = tasks.get(i);
             if (task.runTick == tickCounter) {
                 Message.sendMessage(task.item.commandList.get(task.runCommandIndex));
                 task.runCommandIndex++;
                 task.runTick += task.item.runInterval;
                 
-                // TODO: 空指针错误
                 if (task.runCommandIndex >= task.item.commandList.size()) {
                     tasks.remove(task);
                 }

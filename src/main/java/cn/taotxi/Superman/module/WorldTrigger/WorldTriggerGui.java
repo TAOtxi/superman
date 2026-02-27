@@ -85,15 +85,15 @@ public class WorldTriggerGui {
                     .description(OptionDescription.of(T.tl("worldtrigger.block.triggerPos.desc")))
                     .binding(
                         "0, 0, 0",
-                        () -> String.format("%.2f, %.2f, %.2f", item.triggerPosX, item.triggerPosY, item.triggerPosZ),
+                        () -> String.format("%d, %d, %d", item.triggerPosX, item.triggerPosY, item.triggerPosZ),
                         val -> {
                             String[] pos = val.replace("，", ",")
                                               .replace(" ", "")
                                               .split(",");
                             if (pos.length != 3) return;
-                            item.triggerPosX = Double.parseDouble(pos[0]);
-                            item.triggerPosY = Double.parseDouble(pos[1]);
-                            item.triggerPosZ = Double.parseDouble(pos[2]);
+                            item.triggerPosX = Integer.parseInt(pos[0]);
+                            item.triggerPosY = Integer.parseInt(pos[1]);
+                            item.triggerPosZ = Integer.parseInt(pos[2]);
                         }
                     )
                     .controller(StringControllerBuilder::create)
