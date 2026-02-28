@@ -59,6 +59,7 @@ public class AFK {
             String cmd = config.triggerCmds.get(runCmdIndex);
             LOGGER.info("Run command: [{}] {}", runCmdIndex, cmd);
             Message.sendMessage(cmd);
+            runCmdIndex++;
         }
     }
 
