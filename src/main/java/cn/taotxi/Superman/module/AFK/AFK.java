@@ -21,6 +21,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
@@ -52,14 +53,15 @@ public class AFK {
         }
         // TODO: 切换世界或进入服务器时重置tick
         if (isOutOfMaxEntityCount && tickCounter >= nextRunCmdTick) {
-            if (runCmdIndex >= config.triggerCmds.size()) {
-                resetSafeAFKStatus(true);
-            }
             nextRunCmdTick = tickCounter + config.runInterval;
             String cmd = config.triggerCmds.get(runCmdIndex);
             LOGGER.info("Run command: [{}] {}", runCmdIndex, cmd);
             Message.sendMessage(cmd);
             runCmdIndex++;
+            if (runCmdIndex >= config.triggerCmds.size()) {
+                isOutOfMaxEntityCount = false;
+                resetSafeAFKStatus(false);
+            }
         }
     }
 
@@ -81,6 +83,7 @@ public class AFK {
         tryToAttack(client);
     }
 
+    // TODO: 添加攻击黑名单和白名单
     private static void tryToAttack(Minecraft client) {
         if (!client.player.isAlive()) {
             return;
@@ -94,7 +97,10 @@ public class AFK {
         }
 
         Entity targetEntity = client.crosshairPickEntity;
-        if (targetEntity != null) {
+        if (targetEntity != null && 
+            targetEntity.isAlive() && 
+            targetEntity.isAttackable() &&
+            !(targetEntity instanceof Player)) {
             client.gameMode.attack(client.player, targetEntity);
             client.player.swing(InteractionHand.MAIN_HAND);
         }
