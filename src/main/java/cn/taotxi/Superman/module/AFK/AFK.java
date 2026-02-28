@@ -115,7 +115,7 @@ public class AFK {
     }
 
     public static void registerCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext registryAccess) {
-        LiteralArgumentBuilder<FabricClientCommandSource> afk = ClientCommandManager.literal("afk")
+        LiteralArgumentBuilder<FabricClientCommandSource> afk = ClientCommandManager.literal("afkk")
             .executes(AFK::showHelp)
             .then(ClientCommandManager.literal("help").executes(AFK::showHelp))
             .then(ClientCommandManager.literal("attack")
