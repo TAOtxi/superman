@@ -58,6 +58,23 @@ public class AFK_Gui {
             .controller(IntegerFieldControllerBuilder::create)
             .build());
 
+        autoAttackGroup.option(Factory.addToggleOption(
+            T.tl("afk.isAttackWhitelist"),
+            T.tl("afk.isAttackWhitelist.desc"),
+            AFK_Config.getDefaultIsAttackWhitelist(),
+            () -> AFK.config.isAttackWhitelist,
+            val -> AFK.config.isAttackWhitelist = val
+        ));
+
+        autoAttackGroup.option(ListOption.<String>createBuilder()
+            .name(T.tl("afk.attackList"))
+            .description(OptionDescription.of(T.tl("afk.attackList.desc")))
+            .binding(AFK_Config.getDefaultAttackList(),
+                () -> AFK.config.attackList,
+                val -> AFK.config.attackList = val)
+            .controller(StringControllerBuilder::create)
+            .build());
+
         category.group(autoAttackGroup.build());
 
         OptionGroup.Builder detectEntityCountGroup = OptionGroup.createBuilder()
@@ -82,11 +99,11 @@ public class AFK_Gui {
             .build());
 
         detectEntityCountGroup.option(Option.<Integer>createBuilder()
-            .name(T.tl("afk.maxEntityCount"))
-            .description(OptionDescription.of(T.tl("afk.maxEntityCount.desc")))
-            .binding(AFK_Config.getDefaultMaxEntityCount(),
-                () -> AFK.config.maxEntityCount,
-                val -> AFK.config.maxEntityCount = val)
+            .name(T.tl("afk.safeEntityCount"))
+            .description(OptionDescription.of(T.tl("afk.safeEntityCount.desc")))
+            .binding(AFK_Config.getDefaultSafeEntityCount(),
+                () -> AFK.config.safeEntityCount,
+                val -> AFK.config.safeEntityCount = val)
             .controller(IntegerFieldControllerBuilder::create)
             .build());
 
@@ -107,6 +124,14 @@ public class AFK_Gui {
                 val -> AFK.config.runInterval = val)
             .controller(IntegerFieldControllerBuilder::create)
             .build());
+
+        autoAttackGroup.option(Factory.addToggleOption(
+            T.tl("afk.isTriggerWhitelist"),
+            T.tl("afk.isTriggerWhitelist.desc"),
+            AFK_Config.getDefaultIsTriggerWhitelist(),
+            () -> AFK.config.isTriggerWhitelist,
+            val -> AFK.config.isTriggerWhitelist = val
+        ));
 
         category.group(detectEntityCountGroup.build());
 

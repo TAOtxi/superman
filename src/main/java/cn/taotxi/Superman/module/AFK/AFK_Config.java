@@ -12,11 +12,14 @@ public class AFK_Config extends BaseConfig {
     public boolean autoAttack = getDefaultAutoAttack();
     public int attackInterval = getDefaultAttackInterval();
     public boolean safeAttack = getDefaultSafeAttack();
+    public boolean isAttackWhitelist = getDefaultIsAttackWhitelist();
     public int safeDurability = getDefaultSafeDurability();
+    public List<String> attackList = getDefaultAttackList();
     public boolean runCmdWhenTooManyEntities = getDefaultRunCmdWhenTooManyEntities();
     public int safeTps = getDefaultSafeTps();
-    public int safeEntityCount = getDefaultMaxEntityCount();
+    public int safeEntityCount = getDefaultSafeEntityCount();
     public int checkInterval = getDefaultCheckInterval();
+    public boolean isTriggerWhitelist = getDefaultIsTriggerWhitelist();
     public List<String> triggerEntityTypes = getDefaultTriggerEntityTypes();
     public int runInterval = getDefaultRunInterval();
     public List<String> triggerCmds = List.of();
@@ -30,6 +33,14 @@ public class AFK_Config extends BaseConfig {
     public static boolean getDefaultSafeAttack() {
         return true;
     }
+    public static boolean getDefaultIsAttackWhitelist() {
+        return false;
+    }
+    public static List<String> getDefaultAttackList() {
+        return List.of(
+            "entity.minecraft.player"
+        );
+    }
     public static int getDefaultSafeDurability() {
         return 10;
     }
@@ -39,7 +50,7 @@ public class AFK_Config extends BaseConfig {
     public static int getDefaultSafeTps() {
         return 5;
     }
-    public static int getDefaultMaxEntityCount() {
+    public static int getDefaultSafeEntityCount() {
         return 2000;
     }
     public static int getDefaultCheckInterval() {
@@ -48,14 +59,17 @@ public class AFK_Config extends BaseConfig {
     public static int getDefaultRunInterval() {
         return 20 * 1;
     }
+    public static boolean getDefaultIsTriggerWhitelist() {
+        return true;
+    }
     public static List<String> getDefaultTriggerEntityTypes() {
         return List.of(
-            "zombified_piglin",
-            "wither_skeleton"
+            "entity.minecraft.zombified_piglin",
+            "entity.minecraft.wither_skeleton"
         );
     }
     public static String getDefaultConfigVersion() {
-        return "1.0";
+        return "1.1";
     }
     
     

@@ -21,7 +21,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
@@ -97,9 +97,13 @@ public class AFK {
         if (targetEntity != null && 
             targetEntity.isAlive() && 
             targetEntity.isAttackable() &&
-            !(targetEntity instanceof Player)) {
-            client.gameMode.attack(client.player, targetEntity);
-            client.player.swing(InteractionHand.MAIN_HAND);
+            targetEntity instanceof Mob mob) {
+                boolean isContain = config.attackList.contains(targetEntity.getType().getDescriptionId());
+                if (isContain ^ config.isAttackWhitelist) {
+                    return;
+                }
+                client.gameMode.attack(client.player, mob);
+                client.player.swing(InteractionHand.MAIN_HAND);
         }
     }
 
@@ -113,11 +117,9 @@ public class AFK {
         }
         AABB box = client.player.getBoundingBox().inflate(128);
         List<Entity> entities = client.level.getEntities(client.player, box, (entity) -> {
-            String type = entity.getType().toShortString();
-            if (config.triggerEntityTypes.contains(type)) {
-                return true;
-            }
-            return false;
+            String type = entity.getType().getDescriptionId();
+            boolean isContain = config.triggerEntityTypes.contains(type);
+            return !(isContain ^ config.isTriggerWhitelist);
         });
         return entities.size() >= config.safeEntityCount;
     }

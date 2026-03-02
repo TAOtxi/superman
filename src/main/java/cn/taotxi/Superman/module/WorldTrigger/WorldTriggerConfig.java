@@ -63,7 +63,7 @@ public class WorldTriggerConfig extends BaseConfig {
             return 20 * 5;
         }
         public static String getDefaultConfigVersion() {
-            return "1.0";
+            return "1.1";
         }
     }
 }
