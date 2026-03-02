@@ -73,6 +73,15 @@ public class AFK_Gui {
         ));
 
         detectEntityCountGroup.option(Option.<Integer>createBuilder()
+            .name(T.tl("afk.safeTps"))
+            .description(OptionDescription.of(T.tl("afk.safeTps.desc")))
+            .binding(AFK_Config.getDefaultSafeTps(),
+                () -> AFK.config.safeTps,
+                val -> AFK.config.safeTps = val)
+            .controller(IntegerFieldControllerBuilder::create)
+            .build());
+
+        detectEntityCountGroup.option(Option.<Integer>createBuilder()
             .name(T.tl("afk.maxEntityCount"))
             .description(OptionDescription.of(T.tl("afk.maxEntityCount.desc")))
             .binding(AFK_Config.getDefaultMaxEntityCount(),

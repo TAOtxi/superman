@@ -29,7 +29,7 @@ public class AFK {
     public static final String MODULE_NAME = "AFK";
     public static final MLogger LOGGER = new MLogger(MODULE_NAME);
     public static AFK_Config config = AFK_Config.load(AFK_Config.class, MODULE_NAME);
-    private static boolean isOutOfMaxEntityCount = false;
+    private static boolean isTriggeredSafeProtection = false;
     private static int runCmdIndex = 0;
     private static int nextRunCmdTick = 0;
     private static int lastAttackTick = 0;
@@ -43,34 +43,31 @@ public class AFK {
         if (!config.runCmdWhenTooManyEntities || config.triggerCmds.size() == 0) {
             return;
         }
-        if (!isOutOfMaxEntityCount && tickCounter % config.checkInterval != 0) {
+        if (!isTriggeredSafeProtection && tickCounter % config.checkInterval != 0) {
             return;
         }
 
-        if (!isOutOfMaxEntityCount) {
-            isOutOfMaxEntityCount = isOutOfMaxCounts(client);
+        if (!isTriggeredSafeProtection) {
+            isTriggeredSafeProtection = isOutOfMaxCounts(client) || !isAboveSafeTps();
             nextRunCmdTick = tickCounter;
         }
         // TODO: 切换世界或进入服务器时重置tick
-        if (isOutOfMaxEntityCount && tickCounter >= nextRunCmdTick) {
+        if (isTriggeredSafeProtection && tickCounter >= nextRunCmdTick) {
             nextRunCmdTick = tickCounter + config.runInterval;
             String cmd = config.triggerCmds.get(runCmdIndex);
             LOGGER.info("Run command: [{}] {}", runCmdIndex, cmd);
             Message.sendMessage(cmd);
             runCmdIndex++;
             if (runCmdIndex >= config.triggerCmds.size()) {
-                isOutOfMaxEntityCount = false;
-                resetSafeAFKStatus(false);
+                isTriggeredSafeProtection = false;
+                resetSafeAFKStatus();
             }
         }
     }
 
-    public static void resetSafeAFKStatus(boolean checkAgain) {
+    public static void resetSafeAFKStatus() {
         runCmdIndex = 0;
         nextRunCmdTick = 0;
-        if (checkAgain) {
-            isOutOfMaxEntityCount = isOutOfMaxCounts(Minecraft.getInstance());
-        }
     }
 
     private static void autoAttack(Minecraft client, int tickCounter) {
@@ -106,6 +103,10 @@ public class AFK {
         }
     }
 
+    private static boolean isAboveSafeTps() {
+        return TickUtils.getAverageTps() >= config.safeTps;
+    }
+
     private static boolean isOutOfMaxCounts(Minecraft client) {
         if (client.level == null || client.player == null) {
             return false;
@@ -118,7 +119,7 @@ public class AFK {
             }
             return false;
         });
-        return entities.size() >= config.maxEntityCount;
+        return entities.size() >= config.safeEntityCount;
     }
 
     public static void registerCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext registryAccess) {

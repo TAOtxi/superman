@@ -31,12 +31,13 @@ public class WorldTrigger {
         // 若任务队列不为空，跳过轮询频率限制
         if (tasks.size() == 0 && tickCounter % config.checkInterval != 0) return;
 
-        String serverIp = client.isSingleplayer() ? "*" : client.getCurrentServer().ip; // 单人模式此属性不起作用
-        String worldName = client.level.dimension().location().toString();
-        Vec3 playerPos = client.player.position();
-
+        
         // 只有在轮询频率到达时才检查触发条件
         if (tickCounter % config.checkInterval == 0) {
+            String serverIp = client.isSingleplayer() ? "*" : client.getCurrentServer().ip; // 单人模式此属性不起作用
+            String worldName = client.level.dimension().location().toString();
+            Vec3 playerPos = client.player.position();
+
             for (WorldTriggerConfig.TriggerItem item : config.triggerList) {
                 if (tasks.stream().anyMatch(task -> task.item == item)) continue;
                 if (!item.enabled) return;
@@ -53,7 +54,7 @@ public class WorldTrigger {
             }
         }
 
-        // TODO: 待斟酌，若某个配置关闭后，其任务是否继续运行
+        // TODO: 待斟酌，若某个配置关闭后，其仍在运行的任务是否继续运行
         for (int i=tasks.size()-1; i>=0; i--) {
             Task task = tasks.get(i);
             if (tickCounter >= task.runTick) {
