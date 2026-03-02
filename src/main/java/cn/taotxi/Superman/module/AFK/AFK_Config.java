@@ -69,7 +69,7 @@ public class AFK_Config extends BaseConfig {
         );
     }
     public static String getDefaultConfigVersion() {
-        return "1.1";
+        return "0.0.2";
     }
     
     
