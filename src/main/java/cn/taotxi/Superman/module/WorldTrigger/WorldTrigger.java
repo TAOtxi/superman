@@ -39,6 +39,7 @@ public class WorldTrigger {
         if (tickCounter % config.checkInterval == 0) {
             for (WorldTriggerConfig.TriggerItem item : config.triggerList) {
                 if (tasks.stream().anyMatch(task -> task.item == item)) continue;
+                if (!item.enabled) return;
 
                 if (!item.serverIp.equals(serverIp) && !item.serverIp.equals("*")) return;
                 if (!item.worldName.equals(worldName) && !item.worldName.equals("*")) return;
@@ -52,6 +53,7 @@ public class WorldTrigger {
             }
         }
 
+        // TODO: 待斟酌，若某个配置关闭后，其任务是否继续运行
         for (int i=tasks.size()-1; i>=0; i--) {
             Task task = tasks.get(i);
             if (tickCounter >= task.runTick) {
