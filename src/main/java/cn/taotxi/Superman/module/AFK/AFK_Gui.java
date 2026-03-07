@@ -66,16 +66,17 @@ public class AFK_Gui {
             val -> AFK.config.isAttackWhitelist = val
         ));
 
-        autoAttackGroup.option(ListOption.<String>createBuilder()
+        category.group(autoAttackGroup.build());
+        category.group(ListOption.<String>createBuilder()
             .name(T.tl("afk.attackList"))
             .description(OptionDescription.of(T.tl("afk.attackList.desc")))
             .binding(AFK_Config.getDefaultAttackList(),
                 () -> AFK.config.attackList,
                 val -> AFK.config.attackList = val)
+            .initial("")
             .controller(StringControllerBuilder::create)
             .build());
 
-        category.group(autoAttackGroup.build());
 
         OptionGroup.Builder detectEntityCountGroup = OptionGroup.createBuilder()
                     .name(T.tl("afk.detectEntityCount.group.name"))
