@@ -1,4 +1,36 @@
 {
     "superman.message.reload": "§a已从文件中重新加载 §d%s §a模组配置...",
-    "superman.message.toggle": "§b§lSuperman §r§a模组功能: §f%s"
+    "superman.message.toggle": "§b§lSuperman §r§a模组功能: §f%s",
+
+
+    "superman.afk.name": "挂机专用",
+    "superman.afk.desc": "自适应攻击、安全挂机~",
+    "superman.afk.autoAttack.group.name": "自适应攻击",
+    "superman.afk.autoAttack.group.desc": "根据服务器的tps, 自动调整攻击间隔",
+    "superman.afk.autoAttack.enabled": "自适应攻击开关",
+    "superman.afk.autoAttack.desc": "开启后, 将自动左键. \n\n此功能用于在服务器卡的情况下仍能触发横扫效果. \n\n简单解释下服务器tps低时难以触发横扫的问题:\n假如tps过低,实际上服务器的时间相对于我们是变慢了,相对地, 我们在服务器看来就变快了. 在我们看来间隔为10tick的攻击, 在服务器看来, 有可能会是7, 甚至更低. \n\n自适应攻击原理: \n\n实际攻击间隔 = 设置的攻击间隔 / (服务器tps / 20)",
+    "superman.afk.safeDurability": "主手工具最低耐久",
+    "superman.afk.safeDurability.desc": "当主手工具的耐久低于该值时, 将停止自适应攻击.",
+    "superman.afk.attackMode": "是否只攻击列表内实体",
+    "superman.afk.attackMode.desc": "关闭后, 将忽视攻击列表的实体. 若开启, 则只攻击列表中的实体.",
+    "superman.afk.attackList": "攻击列表",
+    "superman.afk.attackList.desc": "攻击列表",
+    "superman.afk.safeAfk.group.name": "安全挂机",
+    "superman.afk.safeAfk.group.desc": "用于预防玩家周围实体存在过多实体或者服务器tps过低",
+    "superman.afk.safeAfkEnabled.enabled": "安全挂机开关",
+    "superman.afk.safeAfkEnabled.desc": "当玩家周围实体数量超过阈值或者服务器tps低于阈值时, 将执行指定命令.",
+    "superman.afk.safeTps": "安全tps阈值",
+    "superman.afk.safeTps.desc": "当服务器tps低于该值时, 将执行指定命令.",
+    "superman.afk.safeEntityCount": "安全实体数量阈值",
+    "superman.afk.safeEntityCount.desc": "当玩家周围实体数量超过该值时, 将执行指定命令.",
+    "superman.afk.checkInterval": "检查间隔",
+    "superman.afk.checkInterval.desc": "检查间隔, 单位为tick. 一般不用管.",
+    "superman.afk.isTriggerWhitelist": "是否检测实体列表",
+    "superman.afk.isTriggerWhitelist.desc": "关闭后, 将忽视列表内的实体. 若开启列表内的实体.",
+    "superman.afk.triggerEntityTypes": "纳入检测的实体列表",
+    "superman.afk.triggerEntityTypes.desc": "实体列表.",
+    "superman.afk.triggerCmds": "触发的命令列表",
+    "superman.afk.runInterval": "命令运行间隔",
+    "superman.afk.runInterval.desc": "命令运行间隔, 单位为tick. 一般不用管.",
+    "superman.afk.triggerCmds.desc": "若一直符合触发条件,此命令列表将无限循环执行."
 }
