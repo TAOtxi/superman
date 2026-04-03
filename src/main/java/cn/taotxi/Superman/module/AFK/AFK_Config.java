@@ -12,10 +12,10 @@ public class AFK_Config extends BaseConfig {
     public boolean autoAttack = getDefaultAutoAttack();
     public int attackInterval = getDefaultAttackInterval();
     public boolean safeAttack = getDefaultSafeAttack();
-    public boolean isAttackWhitelist = getDefaultIsAttackWhitelist();
+    public boolean attackMode = getDefaultAttackMode();
     public int safeDurability = getDefaultSafeDurability();
     public List<String> attackList = getDefaultAttackList();
-    public boolean runCmdWhenTooManyEntities = getDefaultRunCmdWhenTooManyEntities();
+    public boolean safeAfkEnabled = getDefaultSafeAfkEnabled();
     public int safeTps = getDefaultSafeTps();
     public int safeEntityCount = getDefaultSafeEntityCount();
     public int checkInterval = getDefaultCheckInterval();
@@ -33,7 +33,7 @@ public class AFK_Config extends BaseConfig {
     public static boolean getDefaultSafeAttack() {
         return true;
     }
-    public static boolean getDefaultIsAttackWhitelist() {
+    public static boolean getDefaultAttackMode() {
         return false;
     }
     public static List<String> getDefaultAttackList() {
@@ -44,7 +44,7 @@ public class AFK_Config extends BaseConfig {
     public static int getDefaultSafeDurability() {
         return 10;
     }
-    public static boolean getDefaultRunCmdWhenTooManyEntities() {
+    public static boolean getDefaultSafeAfkEnabled() {
         return true;
     }
     public static int getDefaultSafeTps() {
@@ -69,7 +69,7 @@ public class AFK_Config extends BaseConfig {
         );
     }
     public static String getDefaultConfigVersion() {
-        return "0.0.2";
+        return "0.0.3";
     }
     
     

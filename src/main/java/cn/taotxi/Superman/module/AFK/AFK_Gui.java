@@ -61,9 +61,9 @@ public class AFK_Gui {
         autoAttackGroup.option(Factory.addToggleOption(
             T.tl("afk.isAttackWhitelist"),
             T.tl("afk.isAttackWhitelist.desc"),
-            AFK_Config.getDefaultIsAttackWhitelist(),
-            () -> AFK.config.isAttackWhitelist,
-            val -> AFK.config.isAttackWhitelist = val
+            AFK_Config.getDefaultAttackMode(),
+            () -> AFK.config.attackMode,
+            val -> AFK.config.attackMode = val
         ));
 
         category.group(autoAttackGroup.build());
@@ -79,15 +79,15 @@ public class AFK_Gui {
 
 
         OptionGroup.Builder detectEntityCountGroup = OptionGroup.createBuilder()
-                    .name(T.tl("afk.detectEntityCount.group.name"))
-                    .description(OptionDescription.of(T.tl("afk.detectEntityCount.group.desc")));
+                    .name(T.tl("afk.safeAfk.group.name"))
+                    .description(OptionDescription.of(T.tl("afk.safeAfk.group.desc")));
 
         detectEntityCountGroup.option(Factory.addToggleOption(
-            T.tl("afk.runCmdWhenTooManyEntities.enabled"),
-            T.tl("afk.runCmdWhenTooManyEntities.desc"),
-            AFK_Config.getDefaultRunCmdWhenTooManyEntities(),
-            () -> AFK.config.runCmdWhenTooManyEntities,
-            val -> AFK.config.runCmdWhenTooManyEntities = val
+            T.tl("afk.safeAfkEnabled.enabled"),
+            T.tl("afk.safeAfkEnabled.desc"),
+            AFK_Config.getDefaultSafeAfkEnabled(),
+            () -> AFK.config.safeAfkEnabled,
+            val -> AFK.config.safeAfkEnabled = val
         ));
 
         detectEntityCountGroup.option(Option.<Integer>createBuilder()

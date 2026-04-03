@@ -35,12 +35,12 @@ public class AFK {
     private static int lastAttackTick = 0;
 
     public static void registerTickEvents(Minecraft client, int tickCounter) {
-        preventTooManyEntities(client, tickCounter);
+        safeAfk(client, tickCounter);
         autoAttack(client, tickCounter);
     }
 
-    private static void preventTooManyEntities(Minecraft client, int tickCounter) {
-        if (!config.runCmdWhenTooManyEntities || config.triggerCmds.size() == 0) {
+    private static void safeAfk(Minecraft client, int tickCounter) {
+        if (!config.safeAfkEnabled || config.triggerCmds.size() == 0) {
             return;
         }
         if (!isTriggeredSafeProtection && tickCounter % config.checkInterval != 0) {
@@ -99,7 +99,7 @@ public class AFK {
             targetEntity.isAttackable() &&
             targetEntity instanceof Mob mob) {
                 boolean isContain = config.attackList.contains(targetEntity.getType().getDescriptionId());
-                if (isContain ^ config.isAttackWhitelist) {
+                if (isContain ^ config.attackMode) {
                     return;
                 }
                 client.gameMode.attack(client.player, mob);
@@ -189,12 +189,12 @@ public class AFK {
     }
 
     private static int setSafeAFK(CommandContext<FabricClientCommandSource> context, boolean setValue) {
-        if (config.runCmdWhenTooManyEntities != setValue) {
-            config.runCmdWhenTooManyEntities = setValue;
+        if (config.safeAfkEnabled != setValue) {
+            config.safeAfkEnabled = setValue;
             config.save();
         }
         context.getSource().sendFeedback(
-            Component.literal(String.valueOf(config.runCmdWhenTooManyEntities)));
+            Component.literal(String.valueOf(config.safeAfkEnabled)));
         return 1;
     }
 
