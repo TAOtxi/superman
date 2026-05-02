@@ -34,7 +34,8 @@ public class WorldTrigger {
         
         // 只有在轮询频率到达时才检查触发条件
         if (tickCounter % config.checkInterval == 0) {
-            String serverIp = client.isSingleplayer() ? "*" : client.getCurrentServer().ip; // 单人模式此属性不起作用
+            String serverIp = client.isSingleplayer() || client.isLocalServer() ? 
+                    "*" : client.getCurrentServer().ip; // 单人模式此属性不起作用
             String worldName = client.level.dimension().identifier().toString();
             Vec3 playerPos = client.player.position();
 
